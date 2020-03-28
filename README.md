@@ -1,6 +1,4 @@
-# supply_demand_covid19
-
-A new Flutter project.
+# Covid-19 Supply Demand Mobile Application 
 
 ## Getting Started
 
