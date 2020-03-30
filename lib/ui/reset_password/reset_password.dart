@@ -1,22 +1,16 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:supply_demand_covid19/resources/res_login.dart';
-import 'package:supply_demand_covid19/ui/register/register.dart';
 
-class LoginPage extends StatefulWidget {
+class ResetPasswordPage extends StatefulWidget {
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _ResetPasswordPageState createState() => _ResetPasswordPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _ResetPasswordPageState extends State<ResetPasswordPage> {
   String _initialEmail = "";
-  String _initialPassword = "";
-  bool _isPasswordVisible = false;
   bool _isShowErrorMessageEmail = false;
-  bool _isShowErrorMessagePassword = false;
 
   Widget _showErrorMessageWidget(bool isShow, String message) => (!isShow)
       ? Container()
@@ -42,34 +36,18 @@ class _LoginPageState extends State<LoginPage> {
           ),
         );
 
-  _performLogin(String email, String password) {
+  _performReset(String email) {
     TODO:
-    'navigate to home page';
-  }
-
-  _forgotPassword() {
-    TODO:
-    'navigate to forgot password page';
-  }
-
-  _toDaftarPage() {
-    Navigator.push(
-      context,
-      PageTransition(
-          child: RegisterPage(), type: PageTransitionType.rightToLeft),
-    );
+    'implement reset password';
   }
 
   @override
   Widget build(BuildContext context) {
     TextEditingController _emailController =
         TextEditingController(text: _initialEmail);
-    TextEditingController _passwordController =
-        TextEditingController(text: _initialPassword);
 
     _saveData() {
       _initialEmail = _emailController.value.text;
-      _initialPassword = _passwordController.value.text;
     }
 
     return Scaffold(
@@ -95,7 +73,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         SizedBox(width: ScreenUtil().setHeight(16)),
                         Text(
-                          title_text,
+                          'Reset Password',
                           style: GoogleFonts.poppins(
                             textStyle: TextStyle(
                               fontSize: ScreenUtil().setSp(title_text_size),
@@ -149,77 +127,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       _showErrorMessageWidget(
                           _isShowErrorMessageEmail, 'Email tidak boleh kosong'),
-                      SizedBox(height: ScreenUtil().setHeight(24.4)),
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          password_text,
-                          style: GoogleFonts.poppins(
-                            textStyle: TextStyle(
-                              fontSize: ScreenUtil().setSp(normal_text_size),
-                              fontWeight: FontWeight.w400,
-                              color: Color(color_label_hex),
-                              letterSpacing: normal_letter_spacing,
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: ScreenUtil().setHeight(8)),
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: ScreenUtil().setWidth(10)),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8.0),
-                          color: Color(color_input_hex),
-                        ),
-                        child: TextFormField(
-                          style: GoogleFonts.poppins(
-                            textStyle: TextStyle(
-                              fontSize: ScreenUtil().setSp(normal_text_size),
-                              letterSpacing: normal_letter_spacing,
-                            ),
-                          ),
-                          decoration: InputDecoration(
-                            suffixIcon: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  _saveData();
-                                  _isPasswordVisible = !_isPasswordVisible;
-                                });
-                              },
-                              child: Icon((_isPasswordVisible)
-                                  ? Icons.visibility
-                                  : Icons.visibility_off),
-                            ),
-                            border: InputBorder.none,
-                          ),
-                          obscureText: (_isPasswordVisible) ? false : true,
-                          keyboardType: TextInputType.text,
-                          controller: _passwordController,
-                        ),
-                      ),
                     ],
-                  ),
-                  _showErrorMessageWidget(_isShowErrorMessagePassword,
-                      'Password tidak boleh kosong'),
-                  SizedBox(height: ScreenUtil().setHeight(13)),
-                  Container(
-                    alignment: Alignment.centerRight,
-                    child: GestureDetector(
-                      onTap: () => _forgotPassword(),
-                      child: Text(
-                        forgot_text,
-                        textAlign: TextAlign.end,
-                        style: GoogleFonts.poppins(
-                          textStyle: TextStyle(
-                            fontSize: ScreenUtil().setSp(normal_text_size),
-                            fontWeight: FontWeight.w400,
-                            color: Theme.of(context).primaryColor,
-                            letterSpacing: normal_letter_spacing,
-                          ),
-                        ),
-                      ),
-                    ),
                   ),
                   SizedBox(height: ScreenUtil().setHeight(40)),
                   MaterialButton(
@@ -236,16 +144,14 @@ class _LoginPageState extends State<LoginPage> {
                       setState(() {
                         _saveData();
                         String e = _emailController.value.text;
-                        String p = _passwordController.value.text;
                         _isShowErrorMessageEmail = e.isEmpty;
-                        _isShowErrorMessagePassword = p.isEmpty;
-                        if (e.isNotEmpty && p.isNotEmpty) {
-                          _performLogin(e, p);
+                        if (e.isNotEmpty) {
+                          _performReset(e);
                         }
                       });
                     },
                     child: Text(
-                      button_text,
+                      'RESET',
                       style: GoogleFonts.poppins(
                         textStyle: TextStyle(
                           fontWeight: FontWeight.bold,
@@ -253,36 +159,6 @@ class _LoginPageState extends State<LoginPage> {
                           letterSpacing: big_letter_spacing,
                         ),
                       ),
-                    ),
-                  ),
-                  SizedBox(height: ScreenUtil().setHeight(24)),
-                  RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                      text: daftar_title_text,
-                      style: GoogleFonts.poppins(
-                        textStyle: TextStyle(
-                          fontSize: ScreenUtil().setSp(normal_text_size),
-                          color: Color(color_label_hex),
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: normal_letter_spacing,
-                        ),
-                      ),
-                      children: <TextSpan>[
-                        TextSpan(
-                          text: daftar_subtitle_text,
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () => _toDaftarPage(),
-                          style: GoogleFonts.poppins(
-                            textStyle: TextStyle(
-                              fontSize: ScreenUtil().setSp(normal_text_size),
-                              color: Theme.of(context).primaryColor,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: normal_letter_spacing,
-                            ),
-                          ),
-                        ),
-                      ],
                     ),
                   ),
                 ],

@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:supply_demand_covid19/ui/welcome/welcome.dart';
+import 'package:supply_demand_covid19/resources/res_splashscreen.dart';
 
 class SplashscreenPage extends StatefulWidget {
   @override
@@ -30,36 +31,37 @@ class _SplashscreenPageState extends State<SplashscreenPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
+      body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Image.asset(
-              'assets/img/logo_splashscreen.png',
-              width: ScreenUtil().setWidth(140),
-              height: ScreenUtil().setHeight(140),
+              logo_source,
+              width: ScreenUtil().setWidth(logo_dimen),
+              height: ScreenUtil().setHeight(logo_dimen),
             ),
             SizedBox(height: ScreenUtil().setHeight(40)),
             RichText(
+              textAlign: TextAlign.center,
               text: TextSpan(
-                text: 'App Kebutuhan\nBantuan Barang\n',
+                text: title,
                 style: GoogleFonts.poppins(
                   textStyle: TextStyle(
-                    fontSize: ScreenUtil().setSp(18),
+                    fontSize: ScreenUtil().setSp(font_size),
                     color: Theme.of(context).primaryColor,
                     fontWeight: FontWeight.bold,
-                    letterSpacing: 6,
+                    letterSpacing: letter_spacing,
                   ),
                 ),
                 children: <TextSpan>[
                   TextSpan(
-                    text: 'Covid-19',
+                    text: subtitle,
                     style: GoogleFonts.poppins(
                       textStyle: TextStyle(
-                        fontSize: ScreenUtil().setSp(18),
-                        color: Color(0xFFE51212),
+                        fontSize: ScreenUtil().setSp(font_size),
+                        color: Color(subtitle_color_hex),
                         fontWeight: FontWeight.bold,
-                        letterSpacing: 6,
+                        letterSpacing: letter_spacing,
                       ),
                     ),
                   ),
