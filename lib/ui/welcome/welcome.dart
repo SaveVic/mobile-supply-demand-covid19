@@ -31,6 +31,7 @@ class _WelcomePageState extends State<WelcomePage> {
               style: GoogleFonts.poppins(
                 textStyle: TextStyle(
                   fontSize: ScreenUtil().setSp(title_size),
+                  fontStyle: FontStyle.normal,
                   fontWeight: FontWeight.bold,
                   color: Theme.of(context).primaryColor,
                   letterSpacing: letter_spacing,
@@ -44,7 +45,8 @@ class _WelcomePageState extends State<WelcomePage> {
               style: GoogleFonts.poppins(
                 textStyle: TextStyle(
                   fontSize: ScreenUtil().setSp(subtitle_size),
-                  fontWeight: FontWeight.w400,
+                  fontStyle: FontStyle.normal,
+                  fontWeight: FontWeight.w500,
                   color: Color(subtitle_color_hex),
                   letterSpacing: letter_spacing,
                 ),
@@ -73,6 +75,7 @@ class _WelcomePageState extends State<WelcomePage> {
                 style: GoogleFonts.poppins(
                   textStyle: TextStyle(
                     fontWeight: FontWeight.bold,
+                    fontStyle: FontStyle.normal,
                     fontSize: ScreenUtil().setSp(button_text_size),
                     letterSpacing: button_letter_spacing,
                   ),
@@ -103,6 +106,7 @@ class _WelcomePageState extends State<WelcomePage> {
                 style: GoogleFonts.poppins(
                   textStyle: TextStyle(
                     fontWeight: FontWeight.bold,
+                    fontStyle: FontStyle.normal,
                     fontSize: ScreenUtil().setSp(button_text_size),
                     letterSpacing: button_letter_spacing,
                   ),

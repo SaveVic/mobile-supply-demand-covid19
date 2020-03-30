@@ -48,6 +48,7 @@ class _SplashscreenPageState extends State<SplashscreenPage> {
                 style: GoogleFonts.poppins(
                   textStyle: TextStyle(
                     fontSize: ScreenUtil().setSp(font_size),
+                    fontStyle: FontStyle.normal,
                     color: Theme.of(context).primaryColor,
                     fontWeight: FontWeight.bold,
                     letterSpacing: letter_spacing,
@@ -59,6 +60,7 @@ class _SplashscreenPageState extends State<SplashscreenPage> {
                     style: GoogleFonts.poppins(
                       textStyle: TextStyle(
                         fontSize: ScreenUtil().setSp(font_size),
+                        fontStyle: FontStyle.normal,
                         color: Color(subtitle_color_hex),
                         fontWeight: FontWeight.bold,
                         letterSpacing: letter_spacing,

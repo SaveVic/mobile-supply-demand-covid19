@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:supply_demand_covid19/resources/res_login.dart';
 import 'package:supply_demand_covid19/ui/register/register.dart';
+import 'package:supply_demand_covid19/ui/reset_password/reset_password.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -44,16 +45,19 @@ class _LoginPageState extends State<LoginPage> {
 
   _performLogin(String email, String password) {
     TODO:
-    'navigate to home page';
+    'implement login';
   }
 
   _forgotPassword() {
-    TODO:
-    'navigate to forgot password page';
+    Navigator.pushReplacement(
+      context,
+      PageTransition(
+          child: ResetPasswordPage(), type: PageTransitionType.rightToLeft),
+    );
   }
 
-  _toDaftarPage() {
-    Navigator.push(
+  _toRegisterPage() {
+    Navigator.pushReplacement(
       context,
       PageTransition(
           child: RegisterPage(), type: PageTransitionType.rightToLeft),
@@ -100,6 +104,7 @@ class _LoginPageState extends State<LoginPage> {
                             textStyle: TextStyle(
                               fontSize: ScreenUtil().setSp(title_text_size),
                               fontWeight: FontWeight.bold,
+                              fontStyle: FontStyle.normal,
                               color: Theme.of(context).primaryColor,
                               letterSpacing: normal_letter_spacing,
                             ),
@@ -109,96 +114,94 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   SizedBox(height: ScreenUtil().setHeight(41.5)),
-                  Column(
-                    children: <Widget>[
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          email_text,
-                          style: GoogleFonts.poppins(
-                            textStyle: TextStyle(
-                              fontSize: ScreenUtil().setSp(normal_text_size),
-                              fontWeight: FontWeight.w400,
-                              color: Color(color_label_hex),
-                              letterSpacing: normal_letter_spacing,
-                            ),
-                          ),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      email_text,
+                      style: GoogleFonts.poppins(
+                        textStyle: TextStyle(
+                          fontSize: ScreenUtil().setSp(normal_text_size),
+                          fontStyle: FontStyle.normal,
+                          fontWeight: FontWeight.w500,
+                          color: Color(color_label_hex),
+                          letterSpacing: normal_letter_spacing,
                         ),
                       ),
-                      SizedBox(height: ScreenUtil().setHeight(8)),
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: ScreenUtil().setHeight(10)),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8.0),
-                          color: Color(color_input_hex),
-                        ),
-                        child: TextFormField(
-                          style: GoogleFonts.poppins(
-                            textStyle: TextStyle(
-                              fontSize: ScreenUtil().setSp(normal_text_size),
-                              letterSpacing: normal_letter_spacing,
-                            ),
-                          ),
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                          ),
-                          keyboardType: TextInputType.text,
-                          controller: _emailController,
+                    ),
+                  ),
+                  SizedBox(height: ScreenUtil().setHeight(8)),
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: ScreenUtil().setHeight(10)),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8.0),
+                      color: Color(color_input_hex),
+                    ),
+                    child: TextFormField(
+                      style: GoogleFonts.poppins(
+                        textStyle: TextStyle(
+                          fontSize: ScreenUtil().setSp(normal_text_size),
+                          letterSpacing: normal_letter_spacing,
                         ),
                       ),
-                      _showErrorMessageWidget(
-                          _isShowErrorMessageEmail, 'Email tidak boleh kosong'),
-                      SizedBox(height: ScreenUtil().setHeight(24.4)),
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          password_text,
-                          style: GoogleFonts.poppins(
-                            textStyle: TextStyle(
-                              fontSize: ScreenUtil().setSp(normal_text_size),
-                              fontWeight: FontWeight.w400,
-                              color: Color(color_label_hex),
-                              letterSpacing: normal_letter_spacing,
-                            ),
-                          ),
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                      ),
+                      keyboardType: TextInputType.text,
+                      controller: _emailController,
+                    ),
+                  ),
+                  _showErrorMessageWidget(
+                      _isShowErrorMessageEmail, 'Email tidak boleh kosong'),
+                  SizedBox(height: ScreenUtil().setHeight(24.4)),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      password_text,
+                      style: GoogleFonts.poppins(
+                        textStyle: TextStyle(
+                          fontSize: ScreenUtil().setSp(normal_text_size),
+                          fontStyle: FontStyle.normal,
+                          fontWeight: FontWeight.w500,
+                          color: Color(color_label_hex),
+                          letterSpacing: normal_letter_spacing,
                         ),
                       ),
-                      SizedBox(height: ScreenUtil().setHeight(8)),
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: ScreenUtil().setWidth(10)),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8.0),
-                          color: Color(color_input_hex),
-                        ),
-                        child: TextFormField(
-                          style: GoogleFonts.poppins(
-                            textStyle: TextStyle(
-                              fontSize: ScreenUtil().setSp(normal_text_size),
-                              letterSpacing: normal_letter_spacing,
-                            ),
-                          ),
-                          decoration: InputDecoration(
-                            suffixIcon: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  _saveData();
-                                  _isPasswordVisible = !_isPasswordVisible;
-                                });
-                              },
-                              child: Icon((_isPasswordVisible)
-                                  ? Icons.visibility
-                                  : Icons.visibility_off),
-                            ),
-                            border: InputBorder.none,
-                          ),
-                          obscureText: (_isPasswordVisible) ? false : true,
-                          keyboardType: TextInputType.text,
-                          controller: _passwordController,
+                    ),
+                  ),
+                  SizedBox(height: ScreenUtil().setHeight(8)),
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: ScreenUtil().setWidth(10)),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8.0),
+                      color: Color(color_input_hex),
+                    ),
+                    child: TextFormField(
+                      style: GoogleFonts.poppins(
+                        textStyle: TextStyle(
+                          fontSize: ScreenUtil().setSp(normal_text_size),
+                          letterSpacing: normal_letter_spacing,
                         ),
                       ),
-                    ],
+                      decoration: InputDecoration(
+                        suffixIcon: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _saveData();
+                              _isPasswordVisible = !_isPasswordVisible;
+                            });
+                          },
+                          child: Icon((_isPasswordVisible)
+                              ? Icons.visibility
+                              : Icons.visibility_off),
+                        ),
+                        border: InputBorder.none,
+                      ),
+                      obscureText: (_isPasswordVisible) ? false : true,
+                      keyboardType: TextInputType.text,
+                      controller: _passwordController,
+                    ),
                   ),
                   _showErrorMessageWidget(_isShowErrorMessagePassword,
                       'Password tidak boleh kosong'),
@@ -213,7 +216,8 @@ class _LoginPageState extends State<LoginPage> {
                         style: GoogleFonts.poppins(
                           textStyle: TextStyle(
                             fontSize: ScreenUtil().setSp(normal_text_size),
-                            fontWeight: FontWeight.w400,
+                            fontStyle: FontStyle.normal,
+                            fontWeight: FontWeight.w500,
                             color: Theme.of(context).primaryColor,
                             letterSpacing: normal_letter_spacing,
                           ),
@@ -249,6 +253,7 @@ class _LoginPageState extends State<LoginPage> {
                       style: GoogleFonts.poppins(
                         textStyle: TextStyle(
                           fontWeight: FontWeight.bold,
+                          fontStyle: FontStyle.normal,
                           fontSize: ScreenUtil().setSp(button_text_size),
                           letterSpacing: big_letter_spacing,
                         ),
@@ -263,6 +268,7 @@ class _LoginPageState extends State<LoginPage> {
                       style: GoogleFonts.poppins(
                         textStyle: TextStyle(
                           fontSize: ScreenUtil().setSp(normal_text_size),
+                          fontStyle: FontStyle.normal,
                           color: Color(color_label_hex),
                           fontWeight: FontWeight.bold,
                           letterSpacing: normal_letter_spacing,
@@ -272,10 +278,11 @@ class _LoginPageState extends State<LoginPage> {
                         TextSpan(
                           text: daftar_subtitle_text,
                           recognizer: TapGestureRecognizer()
-                            ..onTap = () => _toDaftarPage(),
+                            ..onTap = () => _toRegisterPage(),
                           style: GoogleFonts.poppins(
                             textStyle: TextStyle(
                               fontSize: ScreenUtil().setSp(normal_text_size),
+                              fontStyle: FontStyle.normal,
                               color: Theme.of(context).primaryColor,
                               fontWeight: FontWeight.bold,
                               letterSpacing: normal_letter_spacing,

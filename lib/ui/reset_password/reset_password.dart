@@ -77,6 +77,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                           style: GoogleFonts.poppins(
                             textStyle: TextStyle(
                               fontSize: ScreenUtil().setSp(title_text_size),
+                              fontStyle: FontStyle.normal,
                               fontWeight: FontWeight.bold,
                               color: Theme.of(context).primaryColor,
                               letterSpacing: normal_letter_spacing,
@@ -87,48 +88,45 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                     ),
                   ),
                   SizedBox(height: ScreenUtil().setHeight(41.5)),
-                  Column(
-                    children: <Widget>[
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          email_text,
-                          style: GoogleFonts.poppins(
-                            textStyle: TextStyle(
-                              fontSize: ScreenUtil().setSp(normal_text_size),
-                              fontWeight: FontWeight.w400,
-                              color: Color(color_label_hex),
-                              letterSpacing: normal_letter_spacing,
-                            ),
-                          ),
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      email_text,
+                      style: GoogleFonts.poppins(
+                        textStyle: TextStyle(
+                          fontSize: ScreenUtil().setSp(normal_text_size),
+                          fontStyle: FontStyle.normal,
+                          fontWeight: FontWeight.w500,
+                          color: Color(color_label_hex),
+                          letterSpacing: normal_letter_spacing,
                         ),
                       ),
-                      SizedBox(height: ScreenUtil().setHeight(8)),
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: ScreenUtil().setHeight(10)),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8.0),
-                          color: Color(color_input_hex),
-                        ),
-                        child: TextFormField(
-                          style: GoogleFonts.poppins(
-                            textStyle: TextStyle(
-                              fontSize: ScreenUtil().setSp(normal_text_size),
-                              letterSpacing: normal_letter_spacing,
-                            ),
-                          ),
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                          ),
-                          keyboardType: TextInputType.text,
-                          controller: _emailController,
-                        ),
-                      ),
-                      _showErrorMessageWidget(
-                          _isShowErrorMessageEmail, 'Email tidak boleh kosong'),
-                    ],
+                    ),
                   ),
+                  SizedBox(height: ScreenUtil().setHeight(8)),
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: ScreenUtil().setHeight(10)),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8.0),
+                      color: Color(color_input_hex),
+                    ),
+                    child: TextFormField(
+                      style: GoogleFonts.poppins(
+                        textStyle: TextStyle(
+                          fontSize: ScreenUtil().setSp(normal_text_size),
+                          letterSpacing: normal_letter_spacing,
+                        ),
+                      ),
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                      ),
+                      keyboardType: TextInputType.text,
+                      controller: _emailController,
+                    ),
+                  ),
+                  _showErrorMessageWidget(
+                      _isShowErrorMessageEmail, 'Email tidak boleh kosong'),
                   SizedBox(height: ScreenUtil().setHeight(40)),
                   MaterialButton(
                     minWidth: ScreenUtil().setWidth(button_width),
@@ -155,6 +153,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                       style: GoogleFonts.poppins(
                         textStyle: TextStyle(
                           fontWeight: FontWeight.bold,
+                          fontStyle: FontStyle.normal,
                           fontSize: ScreenUtil().setSp(button_text_size),
                           letterSpacing: big_letter_spacing,
                         ),
