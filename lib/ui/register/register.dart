@@ -1,11 +1,18 @@
+// import 'package:flushbar/flushbar.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:grouped_buttons/grouped_buttons.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:supply_demand_covid19/api_request/api_request.dart';
+import 'package:supply_demand_covid19/api_request/user_class.dart';
+import 'package:supply_demand_covid19/resources/personal_data_key.dart';
 import 'package:supply_demand_covid19/resources/res_register.dart';
+import 'package:supply_demand_covid19/ui/home/home.dart';
 import 'package:supply_demand_covid19/ui/login/login.dart';
+import 'package:supply_demand_covid19/ui/register/custom_radio.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -13,11 +20,11 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  final _storage = FlutterSecureStorage();
   String _initialEmail = '';
   String _initialLembaga = '';
   String _initialPassword = '';
   String _initialConfirmPassword = '';
-  String _pickedAccountType = account_type_list[0];
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
   bool _isShowErrorMessageEmail = false;
@@ -25,11 +32,24 @@ class _RegisterPageState extends State<RegisterPage> {
   bool _isShowErrorMessagePassword = false;
   bool _isShowErrorMessageConfirmPassword = false;
 
+  String _accountTypeSelected = account_type_list[0];
+  // Flushbar _loading;
+
+  @override
+  void initState() {
+    super.initState();
+    // _loading = Flushbar(
+    //   message: 'Sedang Memproses ...',
+    //   showProgressIndicator: true,
+    //   // progressIndicatorBackgroundColor: Theme.of(context).primaryColor,
+    // );
+  }
+
   _updateError(String email, String lembaga, String pass, String confirmPass) {
     _isShowErrorMessageEmail = email.isEmpty;
     _isShowErrorMessageLembaga = lembaga.isEmpty;
     _isShowErrorMessagePassword = pass.isEmpty;
-    _isShowErrorMessageConfirmPassword = (confirmPass == pass);
+    _isShowErrorMessageConfirmPassword = (confirmPass != pass);
   }
 
   Widget _showErrorMessageWidget(bool isShow, String message) => (!isShow)
@@ -56,45 +76,78 @@ class _RegisterPageState extends State<RegisterPage> {
           ),
         );
 
-  Widget _accountTypeSelector() => RadioButtonGroup(
-        orientation: GroupedButtonsOrientation.HORIZONTAL,
-        onSelected: (String selected) => setState(() {
-          _pickedAccountType = selected;
-        }),
-        labels: account_type_list,
-        picked: _pickedAccountType,
-        activeColor: Theme.of(context).primaryColor,
-        itemBuilder: (Radio rb, Text txt, int i) {
-          String s = txt.data;
-          return Row(
-            children: <Widget>[
-              rb,
-              SizedBox(width: ScreenUtil().setWidth(7)),
-              Text(
-                s,
-                style: GoogleFonts.poppins(
-                  textStyle: TextStyle(
-                    fontSize: normal_text_size,
-                    fontStyle: FontStyle.normal,
-                    fontWeight: FontWeight.bold,
-                    color: (s == _pickedAccountType)
-                        ? Theme.of(context).primaryColor
-                        : Color(color_label_hex),
-                    letterSpacing: normal_letter_spacing,
+  Widget _buildAccountTypeRadioButton(Function saveData) => Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: account_type_list
+            .map((type) => GestureDetector(
+                  onTap: () {
+                    saveData();
+                    setState(() {
+                      _accountTypeSelected = type;
+                    });
+                  },
+                  child: Container(
+                    child: Row(
+                      children: <Widget>[
+                        CustomRadio(
+                          dimension: ScreenUtil().setWidth(14),
+                          color: (type == _accountTypeSelected)
+                              ? Theme.of(context).primaryColor
+                              : Color(color_label_hex),
+                          isActive:
+                              (type == _accountTypeSelected) ? true : false,
+                        ),
+                        SizedBox(width: ScreenUtil().setWidth(7)),
+                        Text(
+                          type,
+                          style: GoogleFonts.poppins(
+                            textStyle: TextStyle(
+                              fontSize: ScreenUtil().setSp(normal_text_size),
+                              fontStyle: FontStyle.normal,
+                              fontWeight: FontWeight.bold,
+                              color: (type == _accountTypeSelected)
+                                  ? Theme.of(context).primaryColor
+                                  : Color(color_label_hex),
+                              letterSpacing: normal_letter_spacing / 2,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ),
-            ],
-          );
-        },
+                ))
+            .toList(),
       );
 
-  _performRegister(String email, String lembaga, String pass) {
-    TODO:
-    'implement register';
+  _performRegister(
+      BuildContext context, String email, String lembaga, String pass) async {
+    // _loading..show(context);
+    DataFromRequest data = await ApiRequest.requestRegister(
+        email, pass, lembaga, _accountTypeSelected.toLowerCase());
+    if (data.success) {
+      User user = data.data;
+      await _storage.write(key: data_email_key, value: user.email);
+      await _storage.write(key: data_name_key, value: user.name);
+      await _storage.write(key: data_role_key, value: user.role);
+      await _storage.write(key: data_jwt_key, value: user.jwt);
+      // _loading.dismiss();
+      Fluttertoast.showToast(
+          msg: data.message, toastLength: Toast.LENGTH_SHORT);
+      // Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+      Navigator.pushAndRemoveUntil(
+        context,
+        PageTransition(child: HomePage(), type: PageTransitionType.fade),
+        (route) => false,
+      );
+    } else {
+      // _loading.dismiss();
+      Fluttertoast.showToast(
+          msg: data.message, toastLength: Toast.LENGTH_SHORT);
+    }
   }
 
   _toLoginPage() {
+    // Navigator.pushReplacementNamed(context, '/login');
     Navigator.pushReplacement(
       context,
       PageTransition(child: LoginPage(), type: PageTransitionType.rightToLeft),
@@ -360,7 +413,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   SizedBox(height: ScreenUtil().setHeight(8)),
                   Container(
-                    child: _accountTypeSelector(),
+                    child: _buildAccountTypeRadioButton(_saveData),
                   ),
                   SizedBox(height: ScreenUtil().setHeight(40)),
                   MaterialButton(
@@ -376,6 +429,9 @@ class _RegisterPageState extends State<RegisterPage> {
                     onPressed: () {
                       setState(() {
                         _saveData();
+                        FocusScopeNode currentFocus = FocusScope.of(context);
+                        if (!currentFocus.hasPrimaryFocus)
+                          currentFocus.unfocus();
                         String e = _emailController.value.text;
                         String l = _lembagaController.value.text;
                         String p = _passwordController.value.text;
@@ -385,7 +441,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             l.isNotEmpty &&
                             p.isNotEmpty &&
                             p == cp) {
-                          _performRegister(e, l, p);
+                          _performRegister(context, e, l, p);
                         }
                       });
                     },

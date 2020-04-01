@@ -1,9 +1,16 @@
+// import 'package:flushbar/flushbar.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:supply_demand_covid19/api_request/api_request.dart';
+import 'package:supply_demand_covid19/api_request/user_class.dart';
+import 'package:supply_demand_covid19/resources/personal_data_key.dart';
 import 'package:supply_demand_covid19/resources/res_login.dart';
+import 'package:supply_demand_covid19/ui/home/home.dart';
 import 'package:supply_demand_covid19/ui/register/register.dart';
 import 'package:supply_demand_covid19/ui/reset_password/reset_password.dart';
 
@@ -13,11 +20,24 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final _storage = FlutterSecureStorage();
   String _initialEmail = "";
   String _initialPassword = "";
   bool _isPasswordVisible = false;
   bool _isShowErrorMessageEmail = false;
   bool _isShowErrorMessagePassword = false;
+
+  // Flushbar _loading;
+
+  @override
+  void initState() {
+    super.initState();
+    // _loading = Flushbar(
+    //   message: 'Sedang Memproses ...',
+    //   showProgressIndicator: true,
+    //   // progressIndicatorBackgroundColor: Theme.of(context).primaryColor,
+    // );
+  }
 
   Widget _showErrorMessageWidget(bool isShow, String message) => (!isShow)
       ? Container()
@@ -43,12 +63,33 @@ class _LoginPageState extends State<LoginPage> {
           ),
         );
 
-  _performLogin(String email, String password) {
-    TODO:
-    'implement login';
+  _performLogin(BuildContext context, String email, String password) async {
+    // _loading..show(context);
+    DataFromRequest data = await ApiRequest.requestLogin(email, password);
+    if (data.success) {
+      User user = data.data;
+      await _storage.write(key: data_email_key, value: user.email);
+      await _storage.write(key: data_name_key, value: user.name);
+      await _storage.write(key: data_role_key, value: user.role);
+      await _storage.write(key: data_jwt_key, value: user.jwt);
+      // _loading.dismiss();
+      Fluttertoast.showToast(
+          msg: data.message, toastLength: Toast.LENGTH_SHORT);
+      // Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+      Navigator.pushAndRemoveUntil(
+        context,
+        PageTransition(child: HomePage(), type: PageTransitionType.fade),
+        (route) => false,
+      );
+    } else {
+      // _loading.dismiss();
+      Fluttertoast.showToast(
+          msg: data.message, toastLength: Toast.LENGTH_SHORT);
+    }
   }
 
   _forgotPassword() {
+    // Navigator.pushReplacementNamed(context, '/reset_password');
     Navigator.pushReplacement(
       context,
       PageTransition(
@@ -57,6 +98,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   _toRegisterPage() {
+    // Navigator.pushReplacementNamed(context, '/register');
     Navigator.pushReplacement(
       context,
       PageTransition(
@@ -239,12 +281,15 @@ class _LoginPageState extends State<LoginPage> {
                     onPressed: () {
                       setState(() {
                         _saveData();
+                        FocusScopeNode currentFocus = FocusScope.of(context);
+                        if (!currentFocus.hasPrimaryFocus)
+                          currentFocus.unfocus();
                         String e = _emailController.value.text;
                         String p = _passwordController.value.text;
                         _isShowErrorMessageEmail = e.isEmpty;
                         _isShowErrorMessagePassword = p.isEmpty;
                         if (e.isNotEmpty && p.isNotEmpty) {
-                          _performLogin(e, p);
+                          _performLogin(context, e, p);
                         }
                       });
                     },

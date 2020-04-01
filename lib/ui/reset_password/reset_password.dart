@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:supply_demand_covid19/resources/res_login.dart';
 
@@ -39,6 +40,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   _performReset(String email) {
     TODO:
     'implement reset password';
+    Fluttertoast.showToast(
+        msg: 'Berhasil reset password', toastLength: Toast.LENGTH_SHORT);
   }
 
   @override
@@ -141,6 +144,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                     onPressed: () {
                       setState(() {
                         _saveData();
+                        FocusScopeNode currentFocus = FocusScope.of(context);
+                        if (!currentFocus.hasPrimaryFocus)
+                          currentFocus.unfocus();
                         String e = _emailController.value.text;
                         _isShowErrorMessageEmail = e.isEmpty;
                         if (e.isNotEmpty) {
