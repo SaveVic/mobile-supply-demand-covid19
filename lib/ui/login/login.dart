@@ -6,11 +6,10 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:supply_demand_covid19/api_request/api_request.dart';
-import 'package:supply_demand_covid19/api_request/user_class.dart';
-import 'package:supply_demand_covid19/resources/personal_data_key.dart';
+import 'package:supply_demand_covid19/api_request/api_auth.dart';
+import 'package:supply_demand_covid19/api_request/endpoint.dart';
 import 'package:supply_demand_covid19/resources/res_login.dart';
-import 'package:supply_demand_covid19/ui/home/home.dart';
+import 'package:supply_demand_covid19/ui/dashboard/dashboard_admin/home_admin.dart';
 import 'package:supply_demand_covid19/ui/register/register.dart';
 import 'package:supply_demand_covid19/ui/reset_password/reset_password.dart';
 
@@ -65,20 +64,19 @@ class _LoginPageState extends State<LoginPage> {
 
   _performLogin(BuildContext context, String email, String password) async {
     // _loading..show(context);
-    DataFromRequest data = await ApiRequest.requestLogin(email, password);
-    if (data.success) {
-      User user = data.data;
-      await _storage.write(key: data_email_key, value: user.email);
-      await _storage.write(key: data_name_key, value: user.name);
-      await _storage.write(key: data_role_key, value: user.role);
-      await _storage.write(key: data_jwt_key, value: user.jwt);
+    DataFromRequest data = await ApiAuth.requestLogin(email, password);
+    if (!data.success) {
+      // User user = data.data;
+      // await _storage.write(key: data_email_key, value: user.email);
+      // await _storage.write(key: data_name_key, value: user.name);
+      // await _storage.write(key: data_role_key, value: user.role);
+      // await _storage.write(key: data_jwt_key, value: user.jwt);
       // _loading.dismiss();
       Fluttertoast.showToast(
           msg: data.message, toastLength: Toast.LENGTH_SHORT);
-      // Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
       Navigator.pushAndRemoveUntil(
         context,
-        PageTransition(child: HomePage(), type: PageTransitionType.fade),
+        PageTransition(child: HomeAdmin(), type: PageTransitionType.fade),
         (route) => false,
       );
     } else {
@@ -89,7 +87,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   _forgotPassword() {
-    // Navigator.pushReplacementNamed(context, '/reset_password');
     Navigator.pushReplacement(
       context,
       PageTransition(
@@ -98,7 +95,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   _toRegisterPage() {
-    // Navigator.pushReplacementNamed(context, '/register');
     Navigator.pushReplacement(
       context,
       PageTransition(

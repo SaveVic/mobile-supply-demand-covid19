@@ -5,7 +5,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:supply_demand_covid19/resources/personal_data_key.dart';
-import 'package:supply_demand_covid19/ui/home/home.dart';
+import 'package:supply_demand_covid19/ui/dashboard/dashboard_admin/home_admin.dart';
 import 'package:supply_demand_covid19/ui/welcome/welcome.dart';
 import 'package:supply_demand_covid19/resources/res_splashscreen.dart';
 
@@ -26,13 +26,11 @@ class _SplashscreenPageState extends State<SplashscreenPage> {
     var duration = const Duration(seconds: 2);
     return Timer(duration, () async {
       var jwt = await _storage.read(key: data_jwt_key);
-      // Navigator.pushReplacementNamed(
-      //     context, (jwt == null) ? '/welcome' : '/home');
       Navigator.pushReplacement(
         context,
         PageTransition(
           type: PageTransitionType.fade,
-          child: (jwt == null) ? WelcomePage() : HomePage(),
+          child: (jwt == null) ? WelcomePage() : HomeAdmin(),
         ),
       );
     });

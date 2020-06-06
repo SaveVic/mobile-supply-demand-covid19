@@ -6,11 +6,12 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:supply_demand_covid19/api_request/api_request.dart';
+import 'package:supply_demand_covid19/api_request/api_auth.dart';
+import 'package:supply_demand_covid19/api_request/endpoint.dart';
 import 'package:supply_demand_covid19/api_request/user_class.dart';
 import 'package:supply_demand_covid19/resources/personal_data_key.dart';
 import 'package:supply_demand_covid19/resources/res_register.dart';
-import 'package:supply_demand_covid19/ui/home/home.dart';
+import 'package:supply_demand_covid19/ui/dashboard/dashboard_admin/home_admin.dart';
 import 'package:supply_demand_covid19/ui/login/login.dart';
 import 'package:supply_demand_covid19/ui/register/custom_radio.dart';
 
@@ -122,7 +123,7 @@ class _RegisterPageState extends State<RegisterPage> {
   _performRegister(
       BuildContext context, String email, String lembaga, String pass) async {
     // _loading..show(context);
-    DataFromRequest data = await ApiRequest.requestRegister(
+    DataFromRequest data = await ApiAuth.requestRegister(
         email, pass, lembaga, _accountTypeSelected.toLowerCase());
     if (data.success) {
       User user = data.data;
@@ -133,10 +134,9 @@ class _RegisterPageState extends State<RegisterPage> {
       // _loading.dismiss();
       Fluttertoast.showToast(
           msg: data.message, toastLength: Toast.LENGTH_SHORT);
-      // Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
       Navigator.pushAndRemoveUntil(
         context,
-        PageTransition(child: HomePage(), type: PageTransitionType.fade),
+        PageTransition(child: HomeAdmin(), type: PageTransitionType.fade),
         (route) => false,
       );
     } else {
@@ -147,7 +147,6 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   _toLoginPage() {
-    // Navigator.pushReplacementNamed(context, '/login');
     Navigator.pushReplacement(
       context,
       PageTransition(child: LoginPage(), type: PageTransitionType.rightToLeft),

@@ -64,7 +64,6 @@ class _WelcomePageState extends State<WelcomePage> {
                 borderRadius: BorderRadius.circular(8.0),
               ),
               onPressed: () {
-                // Navigator.pushNamed(context, '/login');
                 Navigator.push(
                   context,
                   PageTransition(
@@ -95,7 +94,6 @@ class _WelcomePageState extends State<WelcomePage> {
                 borderRadius: BorderRadius.circular(8.0),
               ),
               onPressed: () {
-                // Navigator.pushNamed(context, '/register');
                 Navigator.push(
                   context,
                   PageTransition(

@@ -1,15 +1,9 @@
-import 'dart:convert' as convert;
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:supply_demand_covid19/api_request/user_class.dart';
+import 'package:supply_demand_covid19/api_request/endpoint.dart';
 
-const String main_url = '/api/v1';
-
-const String endpoint_login = '$main_url/auth/login';
-const String endpoint_register = '$main_url/auth/register';
-const String endpoint_refresh_auth = '$main_url/auth/refresh';
-
-class ApiRequest {
+class ApiAuth {
   static Future<DataFromRequest> requestLogin(
       String email, String password) async {
     var response;
@@ -31,7 +25,7 @@ class ApiRequest {
     }
 
     if (response.statusCode == 200) {
-      var jsonResponse = convert.jsonDecode(response.body);
+      var jsonResponse = jsonDecode(response.body);
       var userData = User.fromMap(jsonResponse);
       return DataFromRequest(
         message: 'Login Success',
@@ -69,7 +63,7 @@ class ApiRequest {
     }
 
     if (response.statusCode == 200) {
-      var jsonResponse = convert.jsonDecode(response.body);
+      var jsonResponse = jsonDecode(response.body);
       var userData = User.fromMap(jsonResponse);
       return DataFromRequest(
         message: 'Register Success',
@@ -118,12 +112,4 @@ class ApiRequest {
       );
     }
   }
-}
-
-class DataFromRequest {
-  final String message;
-  final bool success;
-  final dynamic data;
-
-  DataFromRequest({this.message, this.success, this.data});
 }
